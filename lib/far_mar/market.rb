@@ -1,5 +1,12 @@
 module FarMar
   class Market
+    attr_accessor :id
+
+    def initialize(market)
+      @id = id
+      @market = market
+    end
+
     def self.all
       @market_array = CSV.open("./support/markets.csv", "r")
     end
@@ -12,10 +19,11 @@ module FarMar
       # Row is returned implicitly
     end
 
+    # Goal: return collection of vendors associated with given market id
     def vendors(id)
       @vendor_array = CSV.open("./support/vendors.csv", "r")
       market_id = @vendor_array
     end
-
+    
   end
 end
