@@ -33,7 +33,7 @@ module FarMar
 
     # Goal: return collection of vendors associated with given market id
     def vendors(id)
-
+      FarMar::Vendor.all
 
       # Use group_by method for collection of vendor instances -> this is the output
       # Push hash to argument?
