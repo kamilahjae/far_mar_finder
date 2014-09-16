@@ -10,7 +10,7 @@ module FarMar
     end
 
     def self.all
-      @vendor_array = CSV.open("./support/vendors.csv", "r") do |file|
+      CSV.open("./support/vendors.csv", "r") do |file|
         file.collect do |vendor|
           FarMar::Vendor.new(vendor)
         end
@@ -32,6 +32,13 @@ module FarMar
     def market
       all_markets = FarMar::Market.all
       all_markets.find {|market| market.id == self.market_id}
+    end
+
+    # returns a collection of Sale instances
+    # by the vendor_id field.
+    def sales
+      all_sales = FarMar::Sale.all
+      all_sales.find_all {|sale| sale.vendor_id == self.id}
     end
 
   end
