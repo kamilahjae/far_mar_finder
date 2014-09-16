@@ -1,22 +1,34 @@
 module FarMar
   class Market
-    attr_accessor :id
+    attr_accessor :id, :name, :address, :city, :county, :state, :zip
 
-    def initialize(market)
-      @id = market[0]
-      @market = market
+    def initialize(market_array_from_all)
+      puts "the value of market_array_from_all[0] is #{market_array_from_all[0]}"
+      @id = market_array_from_all[0],
+      @name = market_array_from_all[1],
+      @address = market_array_from_all[2],
+      @city = market_array_from_all[3],
+      @county = market_array_from_all[4],
+      @state = market_array_from_all[5],
+      @zip = market_array_from_all[6]
+      puts "The value of @id in initialize is #{@id}"
     end
 
+    # Goal: create 500 market objects
     def self.all
-      @market_array = CSV.read("./support/markets.csv", "r")
+      CSV.open("./support/markets.csv", "r") do |file|
+        file.collect do |market|
+          #puts "This is value of market in .all #{market}"
+          FarMar::Market.new(market)
+        end
+      end
     end
 
     # Goal: return the row where the ID field matches the argument
-    def self.find(id)
-      # 1 Feeds in ID as parameter
-      # 2 Match the given ID with the Market's ID
-      @market_array.find {|row| row[0] == id }
-      # Row is returned implicitly
+    # Is it going to be a problem that our method is called find,
+    # Just like the .find method?
+    def self.find(desired_id)
+      all.find {|market| market.id == desired_id}
     end
 
     # Goal: return collection of vendors associated with given market id
@@ -27,5 +39,3 @@ module FarMar
 
   end
 end
-
-m = Market.new
