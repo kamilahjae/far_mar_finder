@@ -3,15 +3,15 @@ module FarMar
     attr_accessor :id, :name, :address, :city, :county, :state, :zip
 
     def initialize(market_array_from_all)
-      puts "the value of market_array_from_all[0] is #{market_array_from_all[0]}"
-      @id = market_array_from_all[0],
-      @name = market_array_from_all[1],
-      @address = market_array_from_all[2],
-      @city = market_array_from_all[3],
-      @county = market_array_from_all[4],
-      @state = market_array_from_all[5],
+      #puts "the value of market_array_from_all[0] is #{market_array_from_all[0]}"
+      @id = market_array_from_all[0].to_i
+      @name = market_array_from_all[1]
+      @address = market_array_from_all[2]
+      @city = market_array_from_all[3]
+      @county = market_array_from_all[4]
+      @state = market_array_from_all[5]
       @zip = market_array_from_all[6]
-      puts "The value of @id in initialize is #{@id}"
+      #puts "The value of @id in initialize is #{@id}"
     end
 
     # Goal: create 500 market objects
@@ -33,8 +33,11 @@ module FarMar
 
     # Goal: return collection of vendors associated with given market id
     def vendors(id)
-      @vendor_array = CSV.open("./support/vendors.csv", "r")
-      market_id = @vendor_array
+
+
+      # Use group_by method for collection of vendor instances -> this is the output
+      # Push hash to argument?
+      # Make vendor[-1] = market_id
     end
 
   end
