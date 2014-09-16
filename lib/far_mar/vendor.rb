@@ -47,9 +47,13 @@ module FarMar
       all_sales.find_all {|sale| sale.vendor_id == self.id}
     end
 
-    # Return the sum of all of vendors sales in cents
+    # Return the sum of all of vendor's sales in cents
     def revenue
-      sales
+      final_total = 0
+      sales.each do |sale|
+        final_total += sale.amount
+      end
+      return final_total
     end
   end
 end

@@ -4,7 +4,7 @@ module FarMar
 
     def initialize(sale_array)
       @id = sale_array[0].to_i
-      @amount = sale_array[1]
+      @amount = sale_array[1].to_i
       @purchase_time = sale_array[2]
       @vendor_id = sale_array[3].to_i
       @product_id = sale_array[4].to_i
