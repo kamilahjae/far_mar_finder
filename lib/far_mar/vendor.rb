@@ -1,11 +1,11 @@
 module FarMar
   class Vendor
-    attr_accessor :id, :name, :employees, :market_id
+    attr_accessor :id, :name, :no_of_employees, :market_id
 
     def initialize(vendor_array)
       @id = vendor_array[0].to_i
       @name = vendor_array[1]
-      @employees = vendor_array[2]
+      @no_of_employees = vendor_array[2].to_i
       @market_id = vendor_array[3].to_i
     end
 
@@ -18,7 +18,7 @@ module FarMar
     end
 
     def self.find(desired_id)
-      all.find_all {|vendor| vendor.id == desired_id}
+      all.find {|vendor| vendor.id == desired_id}
     end
 
     # Return all of the vendors with the given market id
