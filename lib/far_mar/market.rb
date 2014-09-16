@@ -31,9 +31,12 @@ module FarMar
       all.find {|market| market.id == desired_id}
     end
 
-    # Goal: return collection of vendors associated with given market id
-    def vendors(id)
-      FarMar::Vendor.all
+    # Goal: return collection of vendor objects associated with given market id
+    def self.vendors #(desired_id)
+      all_vendors = FarMar::Vendor.all
+      #puts "#{all_vendors}"
+
+      all_vendors.find_all {|vendor| vendor.market_id == find.id}
 
       # Use group_by method for collection of vendor instances -> this is the output
       # Push hash to argument?
