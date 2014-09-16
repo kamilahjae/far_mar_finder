@@ -17,8 +17,21 @@ module FarMar
       end
     end
 
-    # def self.find(desired_id)
-    #   all.find_all {|vendor| vendor.market_id == desired_id}
-    # end
+    def self.find(desired_id)
+      all.find_all {|vendor| vendor.id == desired_id}
+    end
+
+    # Return all of the vendors with the given market id
+    def self.by_market(market_id)
+
+    end
+
+    # Return the Market instance associated with this vendor using the
+    # vendor market_id field
+    def market
+      all_markets = FarMar::Market.all
+      all_markets.find {|market| market.id == self.market_id}
+    end
+
   end
 end
