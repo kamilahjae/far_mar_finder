@@ -34,6 +34,12 @@ module FarMar
       all_markets.find {|market| market.id == self.market_id}
     end
 
+    # Return a collection of product instances associated w/market
+    # by product's vendor_id field
+    def products
+      all_products = FarMar::Product.all
+      all_products.find_all {|product| product.vendor_id == self.id}
+    end
     # returns a collection of Sale instances
     # by the vendor_id field.
     def sales
