@@ -5,9 +5,10 @@ module FarMar
     def initialize(sale_array)
       @id = sale_array[0].to_i
       @amount = sale_array[1].to_i
-      @purchase_time = sale_array[2]
+      @purchase_time = DateTime.parse(sale_array[2])
       @vendor_id = sale_array[3].to_i
       @product_id = sale_array[4].to_i
+      # @day = sale_array[2][8,2] #we could have used this as a method.
     end
 
     def self.all
@@ -34,13 +35,9 @@ module FarMar
     # two times given as arguments
 
     def self.between(beginning_time, end_time)
-      puts "These are the sales returned between two times
-      #{all.find_all {|sale| sale.purchase_time > beginning_time && sale.purchase_time < end_time}}"
-      all.find_all do |sale|
-        if sale.purchase_time > beginning_time && sale.purchase_time < end_time
-          sale
-        end
-      end
+      times = all.find_all {|sale| sale.purchase_time.between?(DateTime.parse(beginning_time), DateTime.parse(end_time))}
+      puts "these are the objects #{times}"
     end
+
   end
 end

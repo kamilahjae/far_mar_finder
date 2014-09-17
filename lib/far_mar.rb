@@ -1,5 +1,6 @@
 require 'csv'
 require 'time'
+require 'date'
 
 # This file is to require all of our dependencies (each of the classes we make)
 require_relative 'far_mar/market'
