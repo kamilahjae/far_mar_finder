@@ -3,7 +3,8 @@ module FarMar
   class Market
     attr_accessor :id, :name, :address, :city, :county, :state, :zip
 
-    def initialize(market_array_from_all)      @id = market_array_from_all[0].to_i
+    def initialize(market_array_from_all)
+      @id = market_array_from_all[0].to_i
       @name = market_array_from_all[1]
       @address = market_array_from_all[2]
       @city = market_array_from_all[3]
@@ -41,6 +42,23 @@ module FarMar
       vendors.collect do |vendor|
         vendor.products
       end
+    end
+
+    # Goal: Return a collection of market instances
+    # where market name OR vendor name contain the search term
+    def self.search(search_term)
+      all_names = []
+
+      all.each do |market|
+        all_vendors = market.vendors
+
+        all_names << market.name
+
+        all_vendors.each do |vendor|
+          all_names << vendor.name
+        end
+      end
+      all_names.find_all {|name| name.downcase.strip.include? search_term.downcase.strip}
     end
   end
 end
