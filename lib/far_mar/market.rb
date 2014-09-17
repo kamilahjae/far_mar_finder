@@ -65,9 +65,13 @@ module FarMar
       top_vendor = nil
       top_revenue = 0
 
-      if vendor_revenue > top_revenue
+      vendors.each do |vendor|
+        if vendor.revenue > top_revenue
+          top_vendor = vendor
+        end
       end
-
+      puts top_vendor
+      return top_vendor
 
       # revenue_collection = []
       # vendors.collect do |vendor|
