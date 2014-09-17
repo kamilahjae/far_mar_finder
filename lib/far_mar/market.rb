@@ -60,13 +60,32 @@ module FarMar
     end
 
     # Goal: Return the vendor with the highest revenue, for a particular market???
+    # THIS IS BROKEN
     def preferred_vendor
-      revenue_collection = []
-      vendors.collect do |vendor|
-        revenue_collection << vendor.revenue
+      top_vendor = nil
+      top_revenue = 0
+
+      if vendor_revenue > top_revenue
       end
-      revenue_collection.max
+
+
+      # revenue_collection = []
+      # vendors.collect do |vendor|
+      #   revenue_collection << vendor.revenue
+      #   if revenue_collection.max
+      #     return vendor
+      #   end
+      # end
+       #revenue_collection.max
     end
 
+
+    # def worst_vendor
+    #   revenue_collection = []
+    #   vendors.collect do |vendor|
+    #     revenue_collection << vendor.revenue
+    #   revenue_collection.min
+    #   end
+    #end
   end
 end
