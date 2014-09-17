@@ -18,5 +18,29 @@ module FarMar
       end
     end
 
+    # Return the row where the id matches the argument
+    def self.find(desired_id)
+      all.find {|sale| sale.id == desired_id}
+    end
+
+    # Return the vendor instance associated with sale, using the sale's vendor
+    # id field
+    def vendor
+      all_vendors = FarMar::Vendor.all
+      all_vendors.find {|vendor| vendor.id == self.vendor_id}
+    end
+
+    # Return a collection of sales objects where the purchase time is btw the
+    # two times given as arguments
+
+    def self.between(beginning_time, end_time)
+      puts "These are the sales returned between two times
+      #{all.find_all {|sale| sale.purchase_time > beginning_time && sale.purchase_time < end_time}}"
+      all.find_all do |sale|
+        if sale.purchase_time > beginning_time && sale.purchase_time < end_time
+          sale
+        end
+      end
+    end
   end
 end
