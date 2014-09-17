@@ -21,8 +21,6 @@ module FarMar
     end
 
     # Goal: return the row where the ID field matches the argument
-    # Is it going to be a problem that our method is called find,
-    # Just like the .find method?
     def self.find(desired_id)
       all.find {|market| market.id == desired_id}
     end
@@ -30,7 +28,7 @@ module FarMar
     # Goal: return collection of vendor objects associated with given market id
     def vendors
       all_vendors = FarMar::Vendor.all
-      # self in this case refers to the encompassing scope,
+      # self here refers to the encompassing scope,
       # which in this case is an instance of a market, and we know
       # because it is an instance method.
       all_vendors.find_all {|vendor| vendor.market_id == self.id}
