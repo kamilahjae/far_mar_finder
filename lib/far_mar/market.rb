@@ -50,15 +50,23 @@ module FarMar
       all_names = []
 
       all.each do |market|
-        all_vendors = market.vendors
-
         all_names << market.name
-
+        all_vendors = market.vendors
         all_vendors.each do |vendor|
           all_names << vendor.name
         end
       end
       all_names.find_all {|name| name.downcase.strip.include? search_term.downcase.strip}
     end
+
+    # Goal: Return the vendor with the highest revenue, for a particular market???
+    def preferred_vendor
+      revenue_collection = []
+      vendors.collect do |vendor|
+        revenue_collection << vendor.revenue
+      end
+      revenue_collection.max
+    end
+
   end
 end
