@@ -1,3 +1,4 @@
+require_relative 'vendor'
 module FarMar
   class Market
     attr_accessor :id, :name, :address, :city, :county, :state, :zip
@@ -32,6 +33,14 @@ module FarMar
       # which in this case is an instance of a market, and we know
       # because it is an instance method.
       all_vendors.find_all {|vendor| vendor.market_id == self.id}
+    end
+
+    # Goal is to return a collection of product instances associated with the market
+    # through the Vendor class
+    def products
+      vendors.collect do |vendor|
+        vendor.products
+      end
     end
   end
 end
