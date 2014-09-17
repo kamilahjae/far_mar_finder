@@ -36,6 +36,13 @@ module FarMar
     end
 
     # Next we will need to write the number_of_sales function.
+    # Return the number of times a particular product has been sold.
+      ## Collect all of the sales for product id that matches the sale's product_id
+      ## Count the returned group
+    def number_of_sales
+      puts "#{sales.count}"
+      sales.count
+    end
 
   end
 end
