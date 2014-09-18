@@ -60,7 +60,6 @@ module FarMar
     end
 
     # Goal: Return the vendor with the highest revenue, for a particular market???
-    # THIS IS BROKEN
     def preferred_vendor
       top_vendor = nil
       top_revenue = 0
@@ -73,6 +72,7 @@ module FarMar
       puts top_vendor
       return top_vendor
 
+
       # revenue_collection = []
       # vendors.collect do |vendor|
       #   revenue_collection << vendor.revenue
@@ -83,13 +83,18 @@ module FarMar
        #revenue_collection.max
     end
 
+    # Goal: Return the vendor with the highest revenue, for a particular market???
+    def worst_vendor
+      worst_vendor = "bob" # used "bob" just to see if the default value was being replaced
+      top_revenue = 9899
 
-    # def worst_vendor
-    #   revenue_collection = []
-    #   vendors.collect do |vendor|
-    #     revenue_collection << vendor.revenue
-    #   revenue_collection.min
-    #   end
-    #end
+      vendors.each do |vendor|
+        if vendor.revenue < top_revenue
+          worst_vendor = vendor
+        end
+        # puts worst_vendor
+        # return worst_vendor # Code returns values when this is commented out 
+      end
+    end
   end
 end
