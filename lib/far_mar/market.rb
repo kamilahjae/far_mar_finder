@@ -1,4 +1,5 @@
 require_relative 'vendor'
+
 module FarMar
   class Market
     attr_accessor :id, :name, :address, :city, :county, :state, :zip
@@ -36,7 +37,7 @@ module FarMar
       all_vendors.find_all {|vendor| vendor.market_id == self.id}
     end
 
-    # Goal: to return a collection of product instances associated with the market
+    # Goal: return a collection of product instances associated with the market
     # through the Vendor class
     def products
       vendors.collect do |vendor|
@@ -44,8 +45,8 @@ module FarMar
       end
     end
 
-    # Goal: Return a collection of market instances
-    # where market name OR vendor name contain the search term
+    # Goal: Return a collection of market instances where market OR vendor
+    # name contain the search term
     def self.search(search_term)
       all_names = []
 
@@ -60,28 +61,91 @@ module FarMar
     end
 
     # Goal: Return the vendor with the highest revenue, for a particular market.
-    def preferred_vendor_single
+    def preferred_vendor_comparison(vendor_array)
       top_vendor = nil
       top_revenue = 0
 
-      vendors.each do |vendor|
+      vendor_array.each do |vendor|
+        puts "#{vendor.revenue} is the revenue of #{vendor}"
         if vendor.revenue > top_revenue
+          top_revenue = vendor.revenue
           top_vendor = vendor
+          puts "This is the value of top vendor now: #{top_vendor.inspect}"
         end
       end
       return top_vendor
     end
 
     # Goal: returns vendor with highest revenue for a given date.
-    # input date in format year, month day
     def preferred_vendor(year=nil, month=nil, day=nil)
       if year == nil && month == nil && day == nil
-        preferred_vendor_single
+        preferred_vendor_comparison(vendors)
       else
         date = DateTime.new(year,month,day)
         date = date.to_s[0..9]
 
-        # Step 2. Find all vendor's sales and isolate sales by date
+        # Find all vendor's sales
+        all_sales_from_vendors = vendors.collect {|vendor| vendor.sales}
+
+        # Take all sales from each vendor collect individual sale objects
+        individual_sales = all_sales_from_vendors.flatten
+
+        # Need date of sales to equal user's desired date
+        sales_on_date = individual_sales.find_all {|sale| sale.purchase_time.to_s.include? date}
+        #puts "this is sales on date #{sales_on_date}"
+
+        # hash separates sales by vendor ID on a particular day
+        vendor_hash = sales_on_date.group_by {|sale| sale.vendor_id}
+        puts "this is the vendor hash #{vendor_hash}"
+
+        # Sum the sale amount for each vendor
+        vendor_hash.each do |id, sale_objects|
+          puts "This is the id #{id}"
+          puts "This sould be an array of sale_obejcts #{sale_objects}"
+          each_id_total = 0
+          sale_objects.each do |sale|
+            puts "#{sale.amount}"
+            each_id_total += sale.amount
+            puts "This is the total #{each_id_total}"
+          end
+
+          
+          # sale_objects
+          # sale_objects.collect do |sale|
+          #   puts "this is the individual sale object #{sale}"
+          #   return sale
+          # end
+        end
+
+        # # Need vendor objects associatd with each of these sales
+        # vendors_on_date = sales_on_date.collect {|sale| sale.vendor}
+        #
+        # # Perform revenue on vendors to get totals for their sales, and return top vendor
+        # preferred_vendor_comparison(vendors_on_date)
+      end
+    end
+
+    # Goal: Return the vendor with the highest revenue, for a particular market???
+    def worst_vendor_comparison(vendor_array)
+      worst_vendor = nil
+      top_revenue = 100000000 # chose arbitrarily high number
+
+      vendor_array.each do |vendor|
+        if vendor.revenue < top_revenue
+          worst_vendor = vendor
+        end
+      end
+      return worst_vendor # Code returns values when this is commented out
+    end
+
+    def worst_vendor(year = nil, month = nil, day = nil)
+      if year == nil && month == nil && day == nil
+        worst_vendor_comparison(vendors)
+      else
+        date = DateTime.new(year,month,day)
+        date = date.to_s[0..9]
+
+        # Find all vendor's sales and isolate sales by date
         all_sales_from_vendors = vendors.collect {|vendor| vendor.sales}
 
         # Take all sales from each vendor collect individual sale objects
@@ -94,29 +158,8 @@ module FarMar
         vendors_on_date = sales_on_date.collect {|sale| sale.vendor}
 
         # Perform revenue on vendors to get totals for their sales, and return top vendor
-        top_vendor = nil
-        top_revenue = 0
-
-        vendors_on_date.each do |vendor|
-          if vendor.revenue > top_revenue
-            top_vendor = vendor
-          end
-        end
-        return top_vendor
+        worst_vendor_comparison(vendors_on_date)
       end
-    end
-    # Goal: Return the vendor with the highest revenue, for a particular market???
-    def worst_vendor
-      worst_vendor = nil
-      top_revenue = 100000000 # chose arbitrarily high number
-
-      vendors.each do |vendor|
-        if vendor.revenue < top_revenue
-          worst_vendor = vendor
-        end
-      end
-      puts worst_vendor
-      return worst_vendor # Code returns values when this is commented out
     end
   end
 end
