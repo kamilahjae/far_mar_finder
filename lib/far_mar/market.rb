@@ -74,34 +74,37 @@ module FarMar
 
     # Goal: returns vendor with highest revenue for a given date.
     # input date in format year, month day
-    def preferred_vendor(year,month,day)
-      date = DateTime.new(year,month,day)
-      date = date.to_s[0..9]
+    def preferred_vendor(year=nil, month=nil, day=nil)
+      if year == nil && month == nil && day == nil
+        preferred_vendor_single
+      else
+        date = DateTime.new(year,month,day)
+        date = date.to_s[0..9]
 
-      # Step 2. Find all vendor's sales and isolate sales by date
-      all_sales_from_vendors = vendors.collect {|vendor| vendor.sales}
+        # Step 2. Find all vendor's sales and isolate sales by date
+        all_sales_from_vendors = vendors.collect {|vendor| vendor.sales}
 
-      # Take all sales from each vendor collect individual sale objects
-      individual_sales = all_sales_from_vendors.flatten
+        # Take all sales from each vendor collect individual sale objects
+        individual_sales = all_sales_from_vendors.flatten
 
-      # Need date of sales to equal user's desired date
-      sales_on_date = individual_sales.find_all {|sale| sale.purchase_time.to_s.include? date}
+        # Need date of sales to equal user's desired date
+        sales_on_date = individual_sales.find_all {|sale| sale.purchase_time.to_s.include? date}
 
-      # Need vendor objects associatd with each of these sales
-      vendors_on_date = sales_on_date.collect {|sale| sale.vendor}
+        # Need vendor objects associatd with each of these sales
+        vendors_on_date = sales_on_date.collect {|sale| sale.vendor}
 
-      # Perform revenue on vendors to get totals for their sales, and return top vendor
-      top_vendor = nil
-      top_revenue = 0
+        # Perform revenue on vendors to get totals for their sales, and return top vendor
+        top_vendor = nil
+        top_revenue = 0
 
-      vendors_on_date.each do |vendor|
-        if vendor.revenue > top_revenue
-          top_vendor = vendor
+        vendors_on_date.each do |vendor|
+          if vendor.revenue > top_revenue
+            top_vendor = vendor
+          end
         end
+        return top_vendor
       end
-      return top_vendor
     end
-
     # Goal: Return the vendor with the highest revenue, for a particular market???
     def worst_vendor
       worst_vendor = nil
