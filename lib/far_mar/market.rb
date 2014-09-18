@@ -1,4 +1,5 @@
 require_relative 'vendor'
+
 module FarMar
   class Market
     attr_accessor :id, :name, :address, :city, :county, :state, :zip
@@ -36,7 +37,7 @@ module FarMar
       all_vendors.find_all {|vendor| vendor.market_id == self.id}
     end
 
-    # Goal is to return a collection of product instances associated with the market
+    # Goal: to return a collection of product instances associated with the market
     # through the Vendor class
     def products
       vendors.collect do |vendor|
@@ -59,8 +60,8 @@ module FarMar
       all_names.find_all {|name| name.downcase.strip.include? search_term.downcase.strip}
     end
 
-    # Goal: Return the vendor with the highest revenue, for a particular market???
-    def preferred_vendor
+    # Goal: Return the vendor with the highest revenue, for a particular market.
+    def preferred_vendor_single
       top_vendor = nil
       top_revenue = 0
 
@@ -69,32 +70,43 @@ module FarMar
           top_vendor = vendor
         end
       end
-      puts top_vendor
       return top_vendor
+    end
+
+    # Goal: returns vendor with highest revenue for a given date.
+    # input date in format year, month day
+    def preferred_vendor(year,month,day)
+      date = DateTime.new(year,month,day)
+      date = date.to_s[0..9]
+      puts "this is the user's date in DateTime #{date}"
 
 
-      # revenue_collection = []
-      # vendors.collect do |vendor|
-      #   revenue_collection << vendor.revenue
-      #   if revenue_collection.max
-      #     return vendor
-      #   end
-      # end
-       #revenue_collection.max
+
+
+
+
+      # # Step 1. Create all sale objects and check if they include user input date
+      # all_sales = FarMar::Sale.all
+      # sales_on_date = all_sales.find_all {|sale| sale.purchase_time.to_s.include? date.to_s }
+      #
+      # # Step 2. Isolate the vendor for each sale and add their revenue.
+      # who_is_selling = sales_on_date.collect {|sale| sale.vendor}
+      # days_vends_rev = who_is_selling.collect {|vend| vend.revenue}
+      # puts "This is a vendors revenue #{days_vends_rev.first(5)}"
     end
 
     # Goal: Return the vendor with the highest revenue, for a particular market???
     def worst_vendor
-      worst_vendor = "bob" # used "bob" just to see if the default value was being replaced
-      top_revenue = 9899
+      worst_vendor = nil
+      top_revenue = 100000000 # chose arbitrarily high number
 
       vendors.each do |vendor|
         if vendor.revenue < top_revenue
           worst_vendor = vendor
         end
-        # puts worst_vendor
-        # return worst_vendor # Code returns values when this is commented out 
       end
+      puts worst_vendor
+      return worst_vendor # Code returns values when this is commented out
     end
   end
 end

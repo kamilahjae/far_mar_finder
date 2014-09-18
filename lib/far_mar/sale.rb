@@ -33,7 +33,6 @@ module FarMar
 
     # Return a collection of sales objects where the purchase time is btw the
     # two times given as arguments
-
     def self.between(beginning_time, end_time)
       #all.find_all {|sale| sale.purchase_time.between?(DateTime.parse(beginning_time), DateTime.parse(end_time))}
       all.find_all do |sale|
