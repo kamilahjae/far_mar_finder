@@ -1,5 +1,4 @@
 require_relative 'vendor'
-
 module FarMar
   class Market
     attr_accessor :id, :name, :address, :city, :county, :state, :zip
@@ -78,18 +77,27 @@ module FarMar
     def preferred_vendor(year,month,day)
       date = DateTime.new(year,month,day)
       date = date.to_s[0..9]
-      puts "this is the user's date in DateTime #{date}"
+      #puts "this is the user's date in DateTime #{date}"
+
+      # Step 2. Find all vendor's sales and isolate sales by date
+      all_sales_from_each_vendor = vendors.collect {|vendor| vendor.sales}
+
+      # Take all sales from each vendor collect individual sale objects
+      individual_sales = all_sales_from_each_vendor.collect {|sale| sale}
+      puts "These are the individual sales #{individual_sales}"
+      #all_sales_from_vendor.each {|sale| }
+      #sales_from_date = sales_from_vendors.find_all {|sale| sale.purchase_time.to_s.include? date }
+      #puts "These are the sales from a given date #{sales_from_date}"
 
 
+      # Step 3: Calculate each vendor's sale
 
+      # Step 5: Get the top sale
 
+      # Step 6: Return vendor from top sale
 
-
-      # # Step 1. Create all sale objects and check if they include user input date
       # all_sales = FarMar::Sale.all
       # sales_on_date = all_sales.find_all {|sale| sale.purchase_time.to_s.include? date.to_s }
-      #
-      # # Step 2. Isolate the vendor for each sale and add their revenue.
       # who_is_selling = sales_on_date.collect {|sale| sale.vendor}
       # days_vends_rev = who_is_selling.collect {|vend| vend.revenue}
       # puts "This is a vendors revenue #{days_vends_rev.first(5)}"
