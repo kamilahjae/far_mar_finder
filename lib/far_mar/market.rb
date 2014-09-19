@@ -31,18 +31,14 @@ module FarMar
     # Goal: return collection of vendor objects associated with given market id
     def vendors
       all_vendors = FarMar::Vendor.all
-      # self here refers to the encompassing scope,
-      # which in this case is an instance of a market, and we know
-      # because it is an instance method.
+      # self here refers to the encompassing scope, an instance of a market
       all_vendors.find_all {|vendor| vendor.market_id == self.id}
     end
 
     # Goal: return a collection of product instances associated with the market
     # through the Vendor class
     def products
-      vendors.collect do |vendor|
-        vendor.products
-      end
+      vendors.collect {|vendor| vendor.products}
     end
 
     # Goal: Return a collection of market instances where market OR vendor
