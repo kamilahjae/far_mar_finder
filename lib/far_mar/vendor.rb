@@ -10,7 +10,7 @@ module FarMar
     end
 
     def self.all
-      CSV.open("./support/vendors.csv", "r") do |file|
+      @all_vendors ||= CSV.open("./support/vendors.csv", "r") do |file|
         file.collect do |vendor|
           FarMar::Vendor.new(vendor)
         end

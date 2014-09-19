@@ -9,7 +9,7 @@ module FarMar
     end
 
     def self.all
-      CSV.open("./support/products.csv", "r") do |file|
+      @all_products ||= CSV.open("./support/products.csv", "r") do |file|
         file.collect do |product|
           FarMar::Product.new(product)
         end

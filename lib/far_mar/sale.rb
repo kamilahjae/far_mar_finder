@@ -12,26 +12,26 @@ module FarMar
     end
 
     def self.all
-       CSV.open("./support/sales.csv", "r") do |file|
+       @all_sales ||= CSV.open("./support/sales.csv", "r") do |file|
         file.collect do |sale|
           FarMar::Sale.new(sale)
         end
       end
     end
 
-    # Return the row where the id matches the argument
+    # Returns the row where the id matches the argument
     def self.find(desired_id)
       all.find {|sale| sale.id == desired_id}
     end
 
-    # Return the vendor instance associated with sale, using the sale's vendor
+    # Returns the vendor instance associated with sale, using the sale's vendor
     # id field
     def vendor
       all_vendors = FarMar::Vendor.all
       all_vendors.find {|vendor| vendor.id == self.vendor_id}
     end
 
-    # Return a collection of sales objects where the purchase time is btw the
+    # Returns a collection of sales objects where the purchase time is btw the
     # two times given as arguments
     def self.between(beginning_time, end_time)
       #all.find_all {|sale| sale.purchase_time.between?(DateTime.parse(beginning_time), DateTime.parse(end_time))}
@@ -39,12 +39,12 @@ module FarMar
         sale.purchase_time.between?(beginning_time, end_time)
       end
     end
+
     # Returns the Product instance that is associated with the sale using the
     # Sale product_id field
     def product
       all_products = FarMar::Product.all
       all_products.find {|product| product.id == self.product_id}
     end
-
   end
 end

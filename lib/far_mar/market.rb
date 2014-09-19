@@ -14,34 +14,34 @@ module FarMar
       @zip = market_array_from_all[6]
     end
 
-    # Goal: create 500 market objects
+    # Create 500 market objects
     def self.all
-      CSV.open("./support/markets.csv", "r") do |file|
+      @all_markets ||= CSV.open("./support/markets.csv", "r") do |file|
         file.collect do |market|
           FarMar::Market.new(market)
         end
       end
     end
 
-    # Goal: return the row where the ID field matches the argument
+    # Return the row where the ID field matches the argument
     def self.find(desired_id)
       all.find {|market| market.id == desired_id}
     end
 
-    # Goal: return collection of vendor objects associated with given market id
+    # Return collection of vendor objects associated with given market id
     def vendors
       all_vendors = FarMar::Vendor.all
       # self here refers to the encompassing scope, an instance of a market
       all_vendors.find_all {|vendor| vendor.market_id == self.id}
     end
 
-    # Goal: return a collection of product instances associated with the market
+    # Return a collection of product instances associated with the market
     # through the Vendor class
     def products
       vendors.collect {|vendor| vendor.products}
     end
 
-    # Goal: Return a collection of market instances where market OR vendor
+    # Return a collection of market instances where market OR vendor
     # name contain the search term
     def self.search(search_term)
       all_names = []
@@ -56,7 +56,7 @@ module FarMar
       all_names.find_all {|name| name.downcase.strip.include? search_term.downcase.strip}
     end
 
-    # Goal: Return the vendor with the highest revenue, for a particular market.
+    # Return the vendor with the highest revenue, for a particular market.
     def preferred_vendor_comparison(vendor_array)
       top_vendor = nil
       top_revenue = 0
@@ -77,9 +77,9 @@ module FarMar
       end
     end
 
+    # Calculates the revenue of each vendor and pushes to a hash
     def calculate_revenue(date)
       @hash_vend_rev = {}
-      # calculates the revenue of each vendor and pushes to a hash
       sales_per_day(date).each do |vendor_sales_subset|
         vendor_revenue = 0
         vendor_sales_subset.collect do |sale_object|
@@ -89,14 +89,13 @@ module FarMar
       end
     end
 
-    # finds the max revenue and returns vendor object associated with it
+    # Finds the max revenue from hash and returns vendor object associated with it
     def max_revenue
       max_hash = @hash_vend_rev.max_by {|vendor,revenue| revenue}
-      puts "This should be a vendor object #{max_hash[0]}"
       max_hash[0]
     end
 
-    # Goal: returns vendor with highest revenue for a given date.
+    # Returns vendor with highest revenue overall or for a given date.
     def preferred_vendor(year=nil, month=nil, day=nil)
       if year == nil && month == nil && day == nil
         preferred_vendor_comparison(vendors)
@@ -105,24 +104,31 @@ module FarMar
         date = date.to_s[0..9]
 
         calculate_revenue(date)
-        puts "hash of vendors and the incrementing revenue #{@hash_vend_rev}"
         max_revenue
       end
     end
 
-    # Goal: Return the vendor with the highest revenue for a particular market
+    # Returns the vendor with the highest revenue for a particular market
     def worst_vendor_comparison(vendor_array)
       worst_vendor = nil
       top_revenue = 100000000 # chose arbitrarily high number
 
       vendor_array.each do |vendor|
         if vendor.revenue < top_revenue
+          top_revenue = vendor.revenue
           worst_vendor = vendor
         end
       end
       return worst_vendor
     end
 
+    # Returns worst vendor object from hash
+    def min_revenue
+      min_hash = @hash_vend_rev.min_by {|vendor,revenue| revenue}
+      min_hash[0]
+    end
+
+    # Returns worst performing vendor overall or on specific day
     def worst_vendor(year = nil, month = nil, day = nil)
       if year == nil && month == nil && day == nil
         worst_vendor_comparison(vendors)
@@ -130,20 +136,8 @@ module FarMar
         date = DateTime.new(year,month,day)
         date = date.to_s[0..9]
 
-        # Find all vendor's sales and isolate sales by date
-        all_sales_from_vendors = vendors.collect {|vendor| vendor.sales}
-
-        # Take all sales from each vendor collect individual sale objects
-        individual_sales = all_sales_from_vendors.flatten
-
-        # Need date of sales to equal user's desired date
-        sales_on_date = individual_sales.find_all {|sale| sale.purchase_time.to_s.include? date}
-
-        # Need vendor objects associatd with each of these sales
-        vendors_on_date = sales_on_date.collect {|sale| sale.vendor}
-
-        # Perform revenue on vendors to get totals for their sales, and return top vendor
-        worst_vendor_comparison(vendors_on_date)
+        calculate_revenue(date)
+        min_revenue
       end
     end
   end
