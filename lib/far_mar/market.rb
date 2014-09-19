@@ -5,16 +5,16 @@ module FarMar
     attr_accessor :id, :name, :address, :city, :county, :state, :zip
 
     def initialize(market_array_from_all)
-      @id = market_array_from_all[0].to_i
-      @name = market_array_from_all[1]
-      @address = market_array_from_all[2]
-      @city = market_array_from_all[3]
-      @county = market_array_from_all[4]
-      @state = market_array_from_all[5]
-      @zip = market_array_from_all[6]
+      @id        = market_array_from_all[0].to_i
+      @name      = market_array_from_all[1]
+      @address   = market_array_from_all[2]
+      @city      = market_array_from_all[3]
+      @county    = market_array_from_all[4]
+      @state     = market_array_from_all[5]
+      @zip       = market_array_from_all[6]
     end
 
-    # Create 500 market objects
+    # Creates 500 market objects
     def self.all
       @all_markets ||= CSV.open("./support/markets.csv", "r") do |file|
         file.collect do |market|
@@ -23,25 +23,23 @@ module FarMar
       end
     end
 
-    # Return the row where the ID field matches the argument
+    # Returns the row where the ID field matches the argument
     def self.find(desired_id)
       all.find { |market| market.id == desired_id }
     end
 
-    # Return collection of vendor objects associated with given market id
+    # Returns collection of vendor objects associated with given market id
     def vendors
-      all_vendors = FarMar::Vendor.all
-      # self here refers to the encompassing scope, an instance of a market
-      all_vendors.find_all { |vendor| vendor.market_id == id }
+      FarMar::Vendor.all.find_all { |vendor| vendor.market_id == id }
     end
 
-    # Return a collection of product instances associated with the market
+    # Returns a collection of product instances associated with the market
     # through the Vendor class
     def products
       vendors.collect { |vendor| vendor.products }
     end
 
-    # Return a collection of market instances where market OR vendor
+    # Returns a collection of market instances where market OR vendor
     # name contain the search term
     def self.search(search_term)
       all_names = []
@@ -56,7 +54,7 @@ module FarMar
       end
     end
 
-    # Return the vendor with the highest revenue, for a particular market.
+    # Returns the vendor with the highest revenue, for a particular market.
     def preferred_vendor_comparison(vendor_array)
       top_vendor = nil
       top_revenue = 0
@@ -100,8 +98,7 @@ module FarMar
       if year.nil? && month.nil? && day.nil?
         preferred_vendor_comparison(vendors)
       else
-        date = DateTime.new(year, month, day)
-        date = date.to_s[0..9]
+        date = DateTime.new(year, month, day).to_s[0..9]
 
         calculate_revenue(date)
         max_revenue
@@ -133,8 +130,7 @@ module FarMar
       if year.nil? && month.nil? && day.nil?
         worst_vendor_comparison(vendors)
       else
-        date = DateTime.new(year, month, day)
-        date = date.to_s[0..9]
+        date = DateTime.new(year, month, day).to_s[0..9]
 
         calculate_revenue(date)
         min_revenue

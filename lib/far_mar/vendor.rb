@@ -3,10 +3,10 @@ module FarMar
     attr_accessor :id, :name, :no_of_employees, :market_id
 
     def initialize(vendor_array)
-      @id = vendor_array[0].to_i
-      @name = vendor_array[1]
-      @no_of_employees = vendor_array[2].to_i
-      @market_id = vendor_array[3].to_i
+      @id               = vendor_array[0].to_i
+      @name             = vendor_array[1]
+      @no_of_employees  = vendor_array[2].to_i
+      @market_id        = vendor_array[3].to_i
     end
 
     def self.all
@@ -21,33 +21,29 @@ module FarMar
       all.find { |vendor| vendor.id == desired_id }
     end
 
-    # Return all of the vendors with the given market id
+    # Returns all of the vendors with the given market id
     def self.by_market(market_id)
-      vendors = FarMar::Vendor.all
-      vendors.find_all { |vendor| vendor.market_id == market_id }
+      FarMar::Vendor.all.find_all { |vendor| vendor.market_id == market_id }
     end
 
-    # Return the Market instance associated with this vendor using the
+    # Returns the Market instance associated with this vendor using the
     # vendor market_id field
     def market
-      all_markets = FarMar::Market.all
-      all_markets.find { |market| market.id == market_id }
+      FarMar::Market.all.find { |market| market.id == market_id }
     end
 
-    # Return a collection of product instances associated w/market
+    # Returns a collection of product instances associated w/market
     # by product's vendor_id field
     def products
-      all_products = FarMar::Product.all
-      all_products.find_all { |product| product.vendor_id == id }
-    end
-    # returns a collection of Sale instances
-    # by the vendor_id field.
-    def sales
-      all_sales = FarMar::Sale.all
-      all_sales.find_all { |sale| sale.vendor_id == id }
+      FarMar::Product.all.find_all { |product| product.vendor_id == id }
     end
 
-    # Return the sum of all of vendor's sales in cents
+    # Returns a collection of Sale instances by the vendor_id field.
+    def sales
+      FarMar::Sale.all.find_all { |sale| sale.vendor_id == id }
+    end
+
+    # Returns the sum of all of vendor's sales in cents
     def revenue
       final_total = 0
       sales.each do |sale|

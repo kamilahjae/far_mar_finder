@@ -3,8 +3,8 @@ module FarMar
     attr_accessor :id, :name, :vendor_id
 
     def initialize(product_array)
-      @id = product_array[0].to_i
-      @name = product_array[1]
+      @id        = product_array[0].to_i
+      @name      = product_array[1]
       @vendor_id = product_array[2].to_i
     end
 
@@ -23,21 +23,20 @@ module FarMar
     def self.by_vendor(vendor_id)
       all.find_all { |product| product.vendor_id == vendor_id }
     end
+
     # Returns the Vendor instance that is associated with this vendor
     # using the Product vendor_id field
     def vendor
-      all_vendors = FarMar::Vendor.all
-      all_vendors.find { |vendor| vendor.id == vendor_id }
-    end
-    # Return collection of sale instances, using the Sale product_id field.
-    def sales
-      all_sales = FarMar::Sale.all
-      all_sales.find_all { |sale| sale.product_id == id }
+      FarMar::Vendor.all.find { |vendor| vendor.id == vendor_id }
     end
 
-    # Return the number of times a particular product has been sold.
+    # Returns collection of sale instances, using the Sale product_id field.
+    def sales
+      FarMar::Sale.all.find_all { |sale| sale.product_id == id }
+    end
+
+    # Returns the number of times a particular product has been sold.
     def number_of_sales
-      puts "#{ sales.count }"
       sales.count
     end
   end

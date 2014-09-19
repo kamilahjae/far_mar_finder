@@ -3,12 +3,11 @@ module FarMar
     attr_accessor :id, :amount, :purchase_time, :vendor_id, :product_id
 
     def initialize(sale_array)
-      @id = sale_array[0].to_i
-      @amount = sale_array[1].to_i
-      @purchase_time = DateTime.parse(sale_array[2])
-      @vendor_id = sale_array[3].to_i
-      @product_id = sale_array[4].to_i
-      # @day = sale_array[2][8,2] # we could have used this as a method.
+      @id             = sale_array[0].to_i
+      @amount         = sale_array[1].to_i
+      @purchase_time  = DateTime.parse(sale_array[2])
+      @vendor_id      = sale_array[3].to_i
+      @product_id     = sale_array[4].to_i
     end
 
     def self.all
@@ -27,8 +26,7 @@ module FarMar
     # Returns the vendor instance associated with sale, using the sale's vendor
     # id field
     def vendor
-      all_vendors = FarMar::Vendor.all
-      all_vendors.find { |vendor| vendor.id == vendor_id }
+      FarMar::Vendor.all.find { |vendor| vendor.id == vendor_id }
     end
 
     # Returns a collection of sales objects where the purchase time is btw the
@@ -42,8 +40,7 @@ module FarMar
     # Returns the Product instance that is associated with the sale using the
     # Sale product_id field
     def product
-      all_products = FarMar::Product.all
-      all_products.find { |product| product.id == product_id }
+      FarMar::Product.all.find { |product| product.id == product_id }
     end
   end
 end
