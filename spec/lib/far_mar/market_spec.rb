@@ -13,6 +13,10 @@ describe FarMar::Market do
     it "responds to 'find'" do
       expect(FarMar::Market).to respond_to :find
     end
+
+    it "responds to 'search'" do
+      expect(FarMar::Market).to respond_to :search
+    end
   end
 
   describe "attributes" do
@@ -60,5 +64,13 @@ describe FarMar::Market do
       expect(market.preferred_vendor.id).to eq 5
     end
 
+    it "finds the worst performing vendor for a particular market" do
+      expect(market.worst_vendor.id).to eq
+    end
+
+    it "responds to calculate revenue" do
+      date = DateTime.new(2013, 11, 11).to_s[0..9]
+      expect(market.calculate_revenue(date).first.first.amount).to eq 6950
+    end
   end
 end

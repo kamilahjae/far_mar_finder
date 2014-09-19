@@ -69,7 +69,6 @@ module FarMar
 
     # Returns all sales on a given day, grouped by vendor
     def sales_per_day(date)
-      puts "The value of date in separate function is #{ date }"
       vendors.collect do |vendor|
         vendor.sales.find_all { |sale| sale.purchase_time.to_s.include? date }
       end
