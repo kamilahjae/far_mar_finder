@@ -71,10 +71,29 @@ module FarMar
 
     # Returns all sales on a given day, grouped by vendor
     def sales_per_day(date)
-      puts "The value of date in separate funciton is #{date}"
+      puts "The value of date in separate function is #{date}"
       vendors.collect do |vendor|
         vendor.sales.find_all { |sale| sale.purchase_time.to_s.include? date}
       end
+    end
+
+    def calculate_revenue(date)
+      @hash_vend_rev = {}
+      # calculates the revenue of each vendor and pushes to a hash
+      sales_per_day(date).each do |vendor_sales_subset|
+        vendor_revenue = 0
+        vendor_sales_subset.collect do |sale_object|
+          vendor_revenue += sale_object.amount
+          @hash_vend_rev[sale_object.vendor] = vendor_revenue
+        end
+      end
+    end
+
+    # finds the max revenue and returns vendor object associated with it
+    def max_revenue
+      max_hash = @hash_vend_rev.max_by {|vendor,revenue| revenue}
+      puts "This should be a vendor object #{max_hash[0]}"
+      max_hash[0]
     end
 
     # Goal: returns vendor with highest revenue for a given date.
@@ -85,20 +104,9 @@ module FarMar
         date = DateTime.new(year,month,day)
         date = date.to_s[0..9]
 
-        hash_vend_rev = {}
-        # calculates the revenue of each vendor
-        sales_per_day(date).each do |vendor_sales_subset|
-          vendor_revenue = 0
-          vendor_sales_subset.collect do |sale_object|
-            vendor_revenue += sale_object.amount
-            hash_vend_rev[sale_object.vendor] = vendor_revenue
-          end
-        end
-        puts "hash of vendors and the incrementing revenue #{hash_vend_rev}"
-
-        max_hash = hash_vend_rev.max_by {|vendor,revenue| revenue}
-        puts "This should be a vendor object #{max_hash[0]}"
-        max_hash[0]
+        calculate_revenue(date)
+        puts "hash of vendors and the incrementing revenue #{@hash_vend_rev}"
+        max_revenue
       end
     end
 
