@@ -69,6 +69,12 @@ module FarMar
       return top_vendor
     end
 
+    def sales_per_day(date)
+      @days_sales = vendors.collect do |vendor|
+        vendor.sales.find_all { |sale| sale.purchase_time.to_s.include? date}
+      end
+    end
+
     # Goal: returns vendor with highest revenue for a given date.
     def preferred_vendor(year=nil, month=nil, day=nil)
       if year == nil && month == nil && day == nil
@@ -78,13 +84,11 @@ module FarMar
         date = date.to_s[0..9]
 
         # returns all sales on a given day.
-        sales_per_day = vendors.collect do |vendor|
-          vendor.sales.find_all { |sale| sale.purchase_time.to_s.include? date}
-        end
+        sales_per_day(date)
 
         hash_vend_rev = {}
         # calculates the revenue of each vendor
-        sales_per_day.each do |vendor_sales_subset|
+        @days_sales.each do |vendor_sales_subset|
           vendor_revenue = 0
           vendor_sales_subset.collect do |sale_object|
             vendor_revenue += sale_object.amount
@@ -96,42 +100,6 @@ module FarMar
         max_hash = hash_vend_rev.max_by {|vendor,revenue| revenue}
         puts "This should be a vendor object #{max_hash[0]}"
         max_hash[0]
-
-        # Take all sales from each vendor collect individual sale objects
-        # individual_sales = all_sales_from_vendors.flatten
-
-        # # Need date of sales to equal user's desired date
-        # sales_on_date = individual_sales.find_all {|sale| sale.purchase_time.to_s.include? date}
-        # puts "this is sales on date #{sales_on_date}
-
-        # # hash separates sales by vendor ID on a particular day
-        # vendor_hash = sales_on_date.group_by {|sale| sale.vendor_id}
-        # puts "this is the vendor hash #{vendor_hash}"
-
-        # Sum the sale amount for each vendor
-        # vendor_hash.each do |id, sale_objects|
-        #   puts "This is the id #{id}"
-        #   puts "This sould be an array of sale_obejcts #{sale_objects}"
-        #   each_id_total = 0
-        #   sale_objects.each do |sale|
-        #     puts "#{sale.amount}"
-        #     each_id_total += sale.amount
-        #     puts "This is the total #{each_id_total}"
-        #   end
-        # end
-
-          # sale_objects
-          # sale_objects.collect do |sale|
-          #   puts "this is the individual sale object #{sale}"
-          #   return sale
-          # end
-
-
-        # # Need vendor objects associatd with each of these sales
-        # vendors_on_date = sales_on_date.collect {|sale| sale.vendor}
-        #
-        # # Perform revenue on vendors to get totals for their sales, and return top vendor
-        # preferred_vendor_comparison(vendors_on_date)
       end
     end
 
