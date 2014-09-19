@@ -25,20 +25,20 @@ module FarMar
 
     # Return the row where the ID field matches the argument
     def self.find(desired_id)
-      all.find {|market| market.id == desired_id}
+      all.find { |market| market.id == desired_id }
     end
 
     # Return collection of vendor objects associated with given market id
     def vendors
       all_vendors = FarMar::Vendor.all
       # self here refers to the encompassing scope, an instance of a market
-      all_vendors.find_all {|vendor| vendor.market_id == self.id}
+      all_vendors.find_all { |vendor| vendor.market_id == id }
     end
 
     # Return a collection of product instances associated with the market
     # through the Vendor class
     def products
-      vendors.collect {|vendor| vendor.products}
+      vendors.collect { |vendor| vendor.products }
     end
 
     # Return a collection of market instances where market OR vendor
@@ -49,11 +49,11 @@ module FarMar
       all.each do |market|
         all_names << market.name
         all_vendors = market.vendors
-        all_vendors.each do |vendor|
-          all_names << vendor.name
-        end
+        all_vendors.each { |vendor| all_names << vendor.name }
       end
-      all_names.find_all {|name| name.downcase.strip.include? search_term.downcase.strip}
+      all_names.find_all do |name|
+        name.downcase.strip.include? search_term.downcase.strip
+      end
     end
 
     # Return the vendor with the highest revenue, for a particular market.
@@ -66,14 +66,14 @@ module FarMar
           top_vendor = vendor
         end
       end
-      return top_vendor
+      top_vendor
     end
 
     # Returns all sales on a given day, grouped by vendor
     def sales_per_day(date)
-      puts "The value of date in separate function is #{date}"
+      puts "The value of date in separate function is #{ date }"
       vendors.collect do |vendor|
-        vendor.sales.find_all { |sale| sale.purchase_time.to_s.include? date}
+        vendor.sales.find_all { |sale| sale.purchase_time.to_s.include? date }
       end
     end
 
@@ -89,18 +89,18 @@ module FarMar
       end
     end
 
-    # Finds the max revenue from hash and returns vendor object associated with it
+    # Finds max revenue from hash and returns vendor object associated with it
     def max_revenue
-      max_hash = @hash_vend_rev.max_by {|vendor,revenue| revenue}
+      max_hash = @hash_vend_rev.max_by { |_vendor, revenue| revenue }
       max_hash[0]
     end
 
     # Returns vendor with highest revenue overall or for a given date.
-    def preferred_vendor(year=nil, month=nil, day=nil)
-      if year == nil && month == nil && day == nil
+    def preferred_vendor(year = nil, month = nil, day = nil)
+      if year.nil? && month.nil? && day.nil?
         preferred_vendor_comparison(vendors)
       else
-        date = DateTime.new(year,month,day)
+        date = DateTime.new(year, month, day)
         date = date.to_s[0..9]
 
         calculate_revenue(date)
@@ -111,7 +111,7 @@ module FarMar
     # Returns the vendor with the highest revenue for a particular market
     def worst_vendor_comparison(vendor_array)
       worst_vendor = nil
-      top_revenue = 100000000 # chose arbitrarily high number
+      top_revenue = 100_000_000 # chose arbitrarily high number
 
       vendor_array.each do |vendor|
         if vendor.revenue < top_revenue
@@ -119,21 +119,21 @@ module FarMar
           worst_vendor = vendor
         end
       end
-      return worst_vendor
+      worst_vendor
     end
 
     # Returns worst vendor object from hash
     def min_revenue
-      min_hash = @hash_vend_rev.min_by {|vendor,revenue| revenue}
+      min_hash = @hash_vend_rev.min_by { |_vendor, revenue| revenue }
       min_hash[0]
     end
 
     # Returns worst performing vendor overall or on specific day
     def worst_vendor(year = nil, month = nil, day = nil)
-      if year == nil && month == nil && day == nil
+      if year.nil? && month.nil? && day.nil?
         worst_vendor_comparison(vendors)
       else
-        date = DateTime.new(year,month,day)
+        date = DateTime.new(year, month, day)
         date = date.to_s[0..9]
 
         calculate_revenue(date)

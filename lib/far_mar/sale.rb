@@ -8,11 +8,11 @@ module FarMar
       @purchase_time = DateTime.parse(sale_array[2])
       @vendor_id = sale_array[3].to_i
       @product_id = sale_array[4].to_i
-      #@day = sale_array[2][8,2] #we could have used this as a method.
+      # @day = sale_array[2][8,2] # we could have used this as a method.
     end
 
     def self.all
-       @all_sales ||= CSV.open("./support/sales.csv", "r") do |file|
+      @all_sales ||= CSV.open("./support/sales.csv", "r") do |file|
         file.collect do |sale|
           FarMar::Sale.new(sale)
         end
@@ -21,20 +21,19 @@ module FarMar
 
     # Returns the row where the id matches the argument
     def self.find(desired_id)
-      all.find {|sale| sale.id == desired_id}
+      all.find { |sale| sale.id == desired_id }
     end
 
     # Returns the vendor instance associated with sale, using the sale's vendor
     # id field
     def vendor
       all_vendors = FarMar::Vendor.all
-      all_vendors.find {|vendor| vendor.id == self.vendor_id}
+      all_vendors.find { |vendor| vendor.id == vendor_id }
     end
 
     # Returns a collection of sales objects where the purchase time is btw the
     # two times given as arguments
     def self.between(beginning_time, end_time)
-      #all.find_all {|sale| sale.purchase_time.between?(DateTime.parse(beginning_time), DateTime.parse(end_time))}
       all.find_all do |sale|
         sale.purchase_time.between?(beginning_time, end_time)
       end
@@ -44,7 +43,7 @@ module FarMar
     # Sale product_id field
     def product
       all_products = FarMar::Product.all
-      all_products.find {|product| product.id == self.product_id}
+      all_products.find { |product| product.id == product_id }
     end
   end
 end
