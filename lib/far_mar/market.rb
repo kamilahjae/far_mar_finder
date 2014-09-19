@@ -77,12 +77,14 @@ module FarMar
     # Calculates the revenue of each vendor and pushes to a hash
     def calculate_revenue(date)
       @hash_vend_rev = {}
+      "The value of sales_per_day is #{sales_per_day(date)}"
       sales_per_day(date).each do |vendor_sales_subset|
         vendor_revenue = 0
         vendor_sales_subset.collect do |sale_object|
           vendor_revenue += sale_object.amount
           @hash_vend_rev[sale_object.vendor] = vendor_revenue
         end
+        puts "The value of the hash is #{@hash_vend_rev}"
       end
     end
 
@@ -97,7 +99,8 @@ module FarMar
       if year.nil? && month.nil? && day.nil?
         preferred_vendor_comparison(vendors)
       else
-        date = DateTime.new(year, month, day).to_s[0..9]
+        date = DateTime.new(year, month, day)
+        date = date.to_s[0..9]
 
         calculate_revenue(date)
         max_revenue
@@ -115,7 +118,7 @@ module FarMar
           worst_vendor = vendor
         end
       end
-      worst_vendor
+      return worst_vendor
     end
 
     # Returns worst vendor object from hash
@@ -129,7 +132,9 @@ module FarMar
       if year.nil? && month.nil? && day.nil?
         worst_vendor_comparison(vendors)
       else
-        date = DateTime.new(year, month, day).to_s[0..9]
+        date = DateTime.new(year, month, day)
+        date = date.to_s[0..9]
+        puts "In worst_vendor date is #{date}"
 
         calculate_revenue(date)
         min_revenue
