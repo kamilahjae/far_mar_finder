@@ -64,13 +64,10 @@ module FarMar
     def preferred_vendor_comparison(vendor_array)
       top_vendor = nil
       top_revenue = 0
-
       vendor_array.each do |vendor|
-        puts "#{vendor.revenue} is the revenue of #{vendor}"
         if vendor.revenue > top_revenue
           top_revenue = vendor.revenue
           top_vendor = vendor
-          puts "This is the value of top vendor now: #{top_vendor.inspect}"
         end
       end
       return top_vendor
@@ -84,38 +81,55 @@ module FarMar
         date = DateTime.new(year,month,day)
         date = date.to_s[0..9]
 
-        # Find all vendor's sales
-        all_sales_from_vendors = vendors.collect {|vendor| vendor.sales}
+        # returns all sales on a given day.
+        sales_per_day = vendors.collect do |vendor|
+          vendor.sales.find_all { |sale| sale.purchase_time.to_s.include? date}
+        end
+
+        hash_vend_rev = {}
+        # calculates the revenue of each vendor
+        sales_per_day.each do |vendor_sales_subset|
+          vendor_revenue = 0
+          vendor_sales_subset.collect do |sale_object|
+            vendor_revenue += sale_object.amount
+            hash_vend_rev[sale_object.vendor] = vendor_revenue
+          end
+        end
+        puts "hash of vendors and the incrementing revenue #{hash_vend_rev}"
+
+        max_hash = hash_vend_rev.max_by {|vendor,revenue| revenue}
+        puts "This should be a vendor object #{max_hash[0]}"
+        max_hash[0]
 
         # Take all sales from each vendor collect individual sale objects
-        individual_sales = all_sales_from_vendors.flatten
+        # individual_sales = all_sales_from_vendors.flatten
 
-        # Need date of sales to equal user's desired date
-        sales_on_date = individual_sales.find_all {|sale| sale.purchase_time.to_s.include? date}
-        #puts "this is sales on date #{sales_on_date}"
+        # # Need date of sales to equal user's desired date
+        # sales_on_date = individual_sales.find_all {|sale| sale.purchase_time.to_s.include? date}
+        # puts "this is sales on date #{sales_on_date}
 
-        # hash separates sales by vendor ID on a particular day
-        vendor_hash = sales_on_date.group_by {|sale| sale.vendor_id}
-        puts "this is the vendor hash #{vendor_hash}"
+        # # hash separates sales by vendor ID on a particular day
+        # vendor_hash = sales_on_date.group_by {|sale| sale.vendor_id}
+        # puts "this is the vendor hash #{vendor_hash}"
 
         # Sum the sale amount for each vendor
-        vendor_hash.each do |id, sale_objects|
-          puts "This is the id #{id}"
-          puts "This sould be an array of sale_obejcts #{sale_objects}"
-          each_id_total = 0
-          sale_objects.each do |sale|
-            puts "#{sale.amount}"
-            each_id_total += sale.amount
-            puts "This is the total #{each_id_total}"
-          end
+        # vendor_hash.each do |id, sale_objects|
+        #   puts "This is the id #{id}"
+        #   puts "This sould be an array of sale_obejcts #{sale_objects}"
+        #   each_id_total = 0
+        #   sale_objects.each do |sale|
+        #     puts "#{sale.amount}"
+        #     each_id_total += sale.amount
+        #     puts "This is the total #{each_id_total}"
+        #   end
+        # end
 
-          
           # sale_objects
           # sale_objects.collect do |sale|
           #   puts "this is the individual sale object #{sale}"
           #   return sale
           # end
-        end
+
 
         # # Need vendor objects associatd with each of these sales
         # vendors_on_date = sales_on_date.collect {|sale| sale.vendor}
@@ -125,7 +139,7 @@ module FarMar
       end
     end
 
-    # Goal: Return the vendor with the highest revenue, for a particular market???
+    # Goal: Return the vendor with the highest revenue for a particular market
     def worst_vendor_comparison(vendor_array)
       worst_vendor = nil
       top_revenue = 100000000 # chose arbitrarily high number
@@ -135,7 +149,7 @@ module FarMar
           worst_vendor = vendor
         end
       end
-      return worst_vendor # Code returns values when this is commented out
+      return worst_vendor
     end
 
     def worst_vendor(year = nil, month = nil, day = nil)
