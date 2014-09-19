@@ -55,5 +55,10 @@ describe FarMar::Market do
     it "finds the vendors" do
       expect(market.vendors.first.id).to eq 1
     end
+
+    it "finds best performing vendor for a particular market" do
+      expect(market.preferred_vendor.id).to eq 5
+    end
+
   end
 end
