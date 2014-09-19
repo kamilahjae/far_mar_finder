@@ -69,8 +69,10 @@ module FarMar
       return top_vendor
     end
 
+    # Returns all sales on a given day, grouped by vendor
     def sales_per_day(date)
-      @days_sales = vendors.collect do |vendor|
+      puts "The value of date in separate funciton is #{date}"
+      vendors.collect do |vendor|
         vendor.sales.find_all { |sale| sale.purchase_time.to_s.include? date}
       end
     end
@@ -83,12 +85,9 @@ module FarMar
         date = DateTime.new(year,month,day)
         date = date.to_s[0..9]
 
-        # returns all sales on a given day.
-        sales_per_day(date)
-
         hash_vend_rev = {}
         # calculates the revenue of each vendor
-        @days_sales.each do |vendor_sales_subset|
+        sales_per_day(date).each do |vendor_sales_subset|
           vendor_revenue = 0
           vendor_sales_subset.collect do |sale_object|
             vendor_revenue += sale_object.amount
