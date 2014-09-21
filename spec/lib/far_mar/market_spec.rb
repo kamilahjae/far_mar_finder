@@ -64,13 +64,17 @@ describe FarMar::Market do
       expect(market.preferred_vendor.id).to eq 5
     end
 
-    it "finds the worst performing vendor for a particular market" do
-      expect(market.worst_vendor.id).to eq
+    it "finds the best performing vendor for a given date" do
+      expect(market.preferred_vendor(2013,11,11).id).to eq 4
     end
 
-    it "responds to calculate revenue" do
-      date = DateTime.new(2013, 11, 11).to_s[0..9]
-      expect(market.calculate_revenue(date).first.first.amount).to eq 6950
+    it "finds the worst performing vendor for a particular market" do
+      expect(market.worst_vendor.id).to eq 6
     end
+
+    it "finds the worst performming vendor for a given date" do
+      expect(market.worst_vendor(2013,11,11).id).to eq 1
+    end
+
   end
 end
