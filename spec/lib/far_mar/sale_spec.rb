@@ -13,6 +13,11 @@ describe FarMar::Sale do
     it "responds to 'find'" do
       expect(FarMar::Sale).to respond_to :find
     end
+
+    it "finds a sale's attributes when given the product's id" do
+      expect(FarMar::Sale.find(900).amount).to eq 7987
+    end
+
   end
 
   describe "attributes" do
@@ -56,6 +61,5 @@ describe FarMar::Sale do
     it "has the product" do
       expect(sale.product.id).to eq sale.product_id
     end
-
   end
 end
