@@ -19,8 +19,12 @@ describe FarMar::Product do
       expect(FarMar::Product).to respond_to :by_vendor
     end
 
-    it "find the first product by market 1" do
+    it "finds the first product by market 1" do
       expect(FarMar::Product.by_vendor(1).first.name).to eq "Dry Beets"
+    end
+
+    it "finds a product's attributes when given the product's id" do
+      expect(FarMar::Product.find(900).name).to eq "Defeated Honey"
     end
   end
 
