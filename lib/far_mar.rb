@@ -11,9 +11,9 @@ require_relative 'far_mar/sale'
 # to load in irb do require_relative 'far_mar/market'
 
 ### Benchmarking Far_mar Market
-m = FarMar::Market.find(1)
-
-Benchmark.bm do |x|
-  x.report { m.preferred_vendor(2013,11,11)}
-  x.report { FarMar::Market.find(90)}
-end
+# m = FarMar::Market.find(1)
+#
+# Benchmark.bm do |x|
+#   x.report { m.preferred_vendor(2013,11,11)}
+#   x.report { FarMar::Market.find(90)}
+# end
